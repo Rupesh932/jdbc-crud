@@ -7,6 +7,8 @@
 ## Project Description
 A simple Java project demonstrating CRUD operations using JDBC and MySQL.
 
+A simple Java project demonstrating CRUD operations using JDBC and MySQL.
+
 ## Technologies Used
 - Java
 - JDBC
