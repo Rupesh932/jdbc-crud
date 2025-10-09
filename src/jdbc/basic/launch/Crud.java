@@ -1,10 +1,13 @@
 package jdbc.basic.launch;
 
-public interface Crud {
-	String createTable(String string);
-	String createTable();
+import java.util.Map;
 
-	String insertData(String dbName,String tableName,Model model);
+import jdbc.basic.launch.Constants.OperationStatus;
+
+public interface Crud {
+	OperationStatus createTable(String string);
+
+	OperationStatus insertData(String dbName, String tableName, Map<String,Object>userInput);
 
 	void readData();
 

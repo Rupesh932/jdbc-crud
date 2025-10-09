@@ -1,0 +1,30 @@
+ SQL Type Code Summary (java.sql.Types)
+--------------------------------------
+ Type Name       | Constant Name         | Code   | Java Equivalent
+---------------------------------------------------------------
+ CHAR            | Types.CHAR            | 1      | String
+ VARCHAR         | Types.VARCHAR         | 12     | String
+ LONGVARCHAR     | Types.LONGVARCHAR     | -1     | String
+ NUMERIC         | Types.NUMERIC         | 2      | BigDecimal
+ DECIMAL         | Types.DECIMAL         | 3      | BigDecimal
+ BIT             | Types.BIT             | -7     | Boolean
+ BOOLEAN         | Types.BOOLEAN         | 16     | Boolean
+ TINYINT         | Types.TINYINT         | -6     | Byte
+ SMALLINT        | Types.SMALLINT        | 5      | Short
+ INTEGER         | Types.INTEGER         | 4      | Integer
+ BIGINT          | Types.BIGINT          | -5     | Long
+ REAL            | Types.REAL            | 7      | Float
+ FLOAT           | Types.FLOAT           | 6      | Double
+ DOUBLE          | Types.DOUBLE          | 8      | Double
+ DATE            | Types.DATE            | 91     | java.sql.Date
+ TIME            | Types.TIME            | 92     | java.sql.Time
+ TIMESTAMP       | Types.TIMESTAMP       | 93     | java.sql.Timestamp
+ BINARY          | Types.BINARY          | -2     | byte[]
+ VARBINARY       | Types.VARBINARY       | -3     | byte[]
+ LONGVARBINARY   | Types.LONGVARBINARY   | -4     | byte[]
+ NULL            | Types.NULL            | 0      | null
+ OTHER           | Types.OTHER           | 1111   | Object
+ JAVA_OBJECT     | Types.JAVA_OBJECT     | 2000   | Object
+
+
+

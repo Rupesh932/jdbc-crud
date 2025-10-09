@@ -12,6 +12,9 @@ A simple Java project demonstrating CRUD operations using JDBC and MySQL.
 - Create, Read, Update, Delete operations
 - Database connectivity using JDBC
 - Simple console-based interface
+📘 **Project Evolution Log**  
+Curious how this CLI framework evolved?  
+Check out the [Project Evolution Log](PROJECT_EVOLUTION.md) for design decisions, refactors, and architectural milestones.
 
 ## Prerequisites
 - Java JDK 8 or higher
