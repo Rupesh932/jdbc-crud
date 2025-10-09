@@ -5,9 +5,8 @@
 
 
 ## Project Description
-A simple Java project demonstrating CRUD operations using JDBC and MySQL.
-
-A simple Java project demonstrating CRUD operations using JDBC and MySQL.
+A simple Java project demonstrating CRUD operations using JDBC and MySQL.  
+If you find this project helpful, please ⭐ star it to support future development!
 
 ## Technologies Used
 - Java
