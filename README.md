@@ -1,4 +1,8 @@
 # JDBC CRUD OPERATION
+![Version](https://img.shields.io/badge/version-v2.0-blue.svg)
+![License](https://img.shields.io/github/license/Rupesh932/jdbc-crud)
+![Stars](https://img.shields.io/github/stars/Rupesh932/jdbc-crud?style=social)
+
 
 ## Project Description
 A simple Java project demonstrating CRUD operations using JDBC and MySQL.
