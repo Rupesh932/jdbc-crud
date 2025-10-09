@@ -35,9 +35,14 @@ Check out the [Project Evolution Log](PROJECT_EVOLUTION.md) for design decisions
 ## Usage
 Run the main class and follow the on-screen instructions to perform CRUD operations.
 
+## Author
+
+**Rupesh Thapaliya** – [GitHub Profile](https://github.com/Rupesh932)  
+Backend architect, CLI UX enthusiast, and open-source contributor. Passionate about expressive validation, developer happiness, and future-proof design.
+
 ## Team
 - Rupesh Thapaliya — Developer and project lead  
-- AI assistants — Copilot and ChatGPT, providing guidance and support
+- AI assistants — Copilot, providing guidance and support
 
 
 > Note: This project is built using Java 21, but does not rely on any version-specific features. It remains compatible with Java 8 and above.
