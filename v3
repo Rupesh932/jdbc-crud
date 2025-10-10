@@ -1,0 +1,10 @@
+move input related method,scanner,closeResource()   to InputManager(new) class from menu managaer class and make them static.
+call closeresource() from main after program execution, before it has been call inside mm.method to close scan.
+since introduce inputManager class we don't need to pass mm object via constructor to crudmanager ,so delete 
+constructor and variable manager from all class cm,ci.
+move getcoltype() and validName() to CrudHelper(new) class. from menu manager class.
+move getcolvalue() and nullManager() to CrudHelper from CrudManager.
+createTable() of ci is totally changed, now table name is taking from cm(if exitsted, else not come to ci), and to get col-name and 
+col-constrains add one prepareColumnMeta() of CrudHelper class which return map of col-name and col-constrains.which is also manage by  
+cm class and pass dbname,tname,and map to ci from where directly pass those value to cf.cretaeTable().
+ 

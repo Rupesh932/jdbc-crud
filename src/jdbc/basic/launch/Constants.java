@@ -73,7 +73,7 @@ public class Constants {
 		DB_SKIPPED("Database creation skipped."), DB_NOT_FOUND("Database not found"),
 
 		TABLE_CREATED("Table created successfully."), TABLE_CREATION_FAILED("Table creation failed."),
-		TABLE_NOT_FOUND("Table not found."),
+		TABLE_NOT_FOUND("Table not found."),TABLE_EXISTED("Table already existed."),
 
 		DATA_INSERTED("Data inserted successfully."), DATA_INSERT_FAILED("Data insertion failed."),
 

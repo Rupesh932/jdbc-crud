@@ -56,8 +56,8 @@ public class ConnectionFactory {
 
 	public static boolean isDatabaseExist(String dbName) {
 		String qry = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?";
-		// INFORMATION_SCHEMA.SCHEMATA → metadata table ho, jasma sabai database ko naam
-		// hunxa.
+		// INFORMATION_SCHEMA.SCHEMATA → metadata table-> it has collect all database
+		
 		try (Connection con = getCon(); PreparedStatement ps = con.prepareStatement(qry)) {
 			ps.setString(1, dbName);
 			try (ResultSet rs = ps.executeQuery()) {
@@ -261,7 +261,7 @@ public class ConnectionFactory {
 		return false;
 	}
 
-	// for insert ,update and delete query
+	
 	public static String executeUpdateUsingStatement(String dbName, String sqlQuery) {
 		try (Connection con = getDbConnection(dbName); Statement st = con.createStatement()) {
 //			int row = st.executeUpdate(sqlQuery);
