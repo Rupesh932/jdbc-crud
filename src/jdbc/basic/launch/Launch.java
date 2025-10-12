@@ -7,6 +7,8 @@ public class Launch {
 		manager.menuHandler();
 
 		InputManager.closeResource();
+		// TODO: Fix overlapping success message when db/table not found during read
+
 
 	}
 

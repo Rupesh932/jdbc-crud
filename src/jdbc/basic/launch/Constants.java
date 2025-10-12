@@ -6,30 +6,42 @@ import java.time.LocalDateTime;
 
 //re-factured from constant fields to constant-interface and enum
 public class Constants {
+	public static class IntConstant{
+		public static final int ZERO = 0;
+		public static final int ONE = 1;
+		public static final int TWO = 2;
+		public static final int THREE = 3;
+		public static final int FOUR = 4;
+		public static final int FIVE = 5;
+		public static final int SIX = 6;
+		public static final int SEVEN = 7;
+		public static final int EIGHT = 8;
+		public static final int NINE = 9;
+		
+	}
 
-	// Menu options(constants)
+	// Menu options
 	public static class Menu {
-		public static final int CREATE_TABLE = 1;
-		public static final int INSERT_DATA = 2;
-		public static final int READ_DATA = 3;
-		public static final int UPDATE_DATA = 4;
-		public static final int DELETE_DATA = 5;
-		public static final int EXIT = 9;
+		public static final int CREATE_TABLE = IntConstant.ONE;
+		public static final int INSERT_DATA = IntConstant.TWO;
+		public static final int READ_DATA = IntConstant.THREE;
+		public static final int UPDATE_DATA = IntConstant.FOUR;
+		public static final int DELETE_DATA = IntConstant.FIVE;
+		public static final int EXIT = IntConstant.NINE;
 	}
 
 	// Input status
 	public static class Input {
-		public static final int MAX_ATTEMPTS = 3;
-		public static final int ZERO = 0;
-		public static final int MIN_ATTEMPTS = ZERO;
-		public static final int MIN_OPTION = Menu.CREATE_TABLE;
-		public static final int MAX_OPTION = Menu.DELETE_DATA;
+		public static final int MAX_ATTEMPTS = IntConstant.THREE;
+		public static final int MIN_ATTEMPTS = IntConstant.ZERO;
+		public static final int MIN_OPTION = IntConstant.ONE;
+		public static final int MAX_OPTION = Menu.DELETE_DATA ;
 	}
 
 	// for default values
 	public static class DefaultValue {
-		public static final int DEFAULT_INTEGER = 000;
-		public static final double DEFAULT_DOUBLE = 00.00;
+		public static final int DEFAULT_INTEGER = IntConstant.ZERO;
+		public static final double DEFAULT_DOUBLE = 0.0;
 		public static final String DEFAULT_STRING = "unspecified";
 		public static final String UNKNOWN = "N/A";
 		public static final String DEFAULT_BOOLEAN = UNKNOWN;
@@ -55,7 +67,7 @@ public class Constants {
 		// Enum constants must be declared before fields and constructor
 		// Each constant calls the constructor with its message
 
-		SUCCESS("success"), FAILED("failed"), EXISTED("already exists"), ERROR("something went wrong!");
+		SUCCESS("success"), FAILED("failed"), EXISTED("already exists"), ERROR("something went wrong!"),FINISHED("Finished");
 
 		private final String message;
 
@@ -81,7 +93,8 @@ public class Constants {
 
 		DATA_DELETED("Data deleted successfully."), DATA_DELETE_FAILED("Data deletion failed."),
 
-		UNKNOWN_ERROR("Something went wrong!");
+		UNKNOWN_ERROR("Something went wrong!"),
+		UNSUPPORTED("Unsupported data type");
 
 		private String message;
 
@@ -93,5 +106,9 @@ public class Constants {
 			return message;
 		}
 	}
-
+ public enum ReadMode{
+	 ALL,
+	 BY_ID,
+	 BY_CREDENTIALS;
+ }
 }

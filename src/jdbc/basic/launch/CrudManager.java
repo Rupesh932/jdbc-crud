@@ -4,22 +4,22 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import jdbc.basic.launch.Constants.OperationStatus;
+import jdbc.basic.launch.Constants.ReadMode;
 
 public class CrudManager {
 	private Crud ci = new CrudImpl();
-	CrudManagerHelper helper = new CrudManagerHelper();
+	CrudFlowHelper helper = new CrudFlowHelper();
 
 	public String handleTableCreation() {
 		String dbName = GetName.getDbName();
-		if (ConnectionFactory.isDatabaseExist(dbName)) {
+		if (DbConnectionManager.isDatabaseExist(dbName)) {
 			String tableName = GetName.getTableName(dbName);
-			if (!ConnectionFactory.isTableExists(dbName, tableName)) {
+			if (!DatabaseAdmin.isTableExists(dbName, tableName)) {
 				return helper.createTableIfNotExist(dbName, tableName);
 			} else {
 				return MessageStyler.makeGreen(Emoji.SUCCESS + Constants.OperationMessage.TABLE_EXISTED.getMessage());
 			}
 		}
-
 		// prompts for user if database not exist.
 		System.out.println(Color.RED + Emoji.CROSSMARK + "database '" + dbName
 				+ "' is not found.do you want to create this database? " + Color.RESET);
@@ -33,49 +33,13 @@ public class CrudManager {
 	}
 
 	public String handleInsertData() {
-		String dbName = CrudHelper.validName("enter database name to insert data.");
-		if (ConnectionFactory.isDatabaseExist(dbName)) {
-			String tableName = CrudHelper.validName("enter table name to insert data.");
-			if (ConnectionFactory.isTableExists(dbName, tableName)) {
-				List<ColumnMeta> cols = ConnectionFactory.getInsertableColumns(dbName, tableName);
+		String dbName = GetName.getDbName("enter database name to insert data.");
+		if (DbConnectionManager.isDatabaseExist(dbName)) {
+			String tableName = GetName.getTableName(dbName, "enter table name to insert data.");
+			if (DatabaseAdmin.isTableExists(dbName, tableName)) {
+				List<ColumnMeta> cols = SchemaInspector.getInsertableColumns(dbName, tableName);
 				Map<String, Object> userInput = new LinkedHashMap<>();
-				Object colValue;
-				String colType;
-				for (ColumnMeta meta : cols) {
-					System.out.println(Color.BG_GREEN + Color.WHITE + Emoji.NOTE + "column name: " + meta.colName()
-							+ ", can hold: " + meta.intCode() + "(typed), is mandatory:" + meta.isMandatory()
-							+ ", should unique :" + meta.isUnique() + Color.RESET);
-					colType = CrudHelper.getColumnType(meta.intCode());
-					if (meta.isMandatory()) {
-						while (true) {
-							colValue = CrudHelper.getColumnValue(colType, meta.colName());
-							if (meta.isUnique() && colValue instanceof String s) {
-								boolean isUnique = ConnectionFactory.isColumnValueUnique(dbName, tableName,
-										meta.colName(), s);
-								if (!isUnique) {
-									System.out.println(MessageStyler.makeRed() + Emoji.ERROR + s
-											+ " is already taken, please enter unique value for '" + meta.colName()
-											+ "'");
-									continue;
-								}
-							}
-							userInput.put(meta.colName(), colValue);
-							break;
-						}
-					} else {
-						System.out.println(Color.BRIGHT_RED + Color.YELLOW + Emoji.WARNING
-								+ "Do you want to insert data to nullable field ?" + Color.RESET);
-						char yesNo = InputManager.charInput("Press y/Y to insert or press any key to ignore.");
-						if (yesNo == 'y' || yesNo == 'Y') {
-							colValue = CrudHelper.getColumnValue(colType, meta.colName());
-							userInput.put(meta.colName(), colValue);
-						} else {
-							userInput.put(meta.colName(), CrudHelper.nullManager(colType));
-						}
-					}
-
-				}
-
+				userInput = helper.dataCollector(dbName, tableName, cols);
 				OperationStatus insertData = ci.insertData(dbName, tableName, userInput);
 				if (insertData.equals(Constants.OperationStatus.SUCCESS)) {
 					return MessageStyler
@@ -95,8 +59,45 @@ public class CrudManager {
 		}
 	}
 
-	public void handleReadData() {
-		// TODO Auto-generated method stub
+	public String handleReadData() {
+		String dbName = GetName.getDbName("Enter database name to read table.");
+
+		if (!DbConnectionManager.isDatabaseExist(dbName)) {
+			return MessageStyler.makeRed() + Emoji.CROSSMARK + Constants.OperationMessage.DB_NOT_FOUND.getMessage()
+					+ Color.RESET;
+		}
+		String tableName = GetName.getTableName(dbName, "Enter table name to read data from database ");
+		if (!DatabaseAdmin.isTableExists(dbName, tableName)) {
+			return MessageStyler.makeRed() + Emoji.CROSSMARK + Constants.OperationMessage.TABLE_NOT_FOUND.getMessage()
+					+ Color.RESET;
+		}
+
+		ReadMode mode = helper.getReadMode();
+		switch (mode) {
+		case ALL -> {
+			System.out.println(MessageStyler.makePurple(Emoji.INFO + "Reading all rows:"));
+			List<Map<String, Object>> rows = ci.readAllRows(dbName, tableName);
+			return DisplayHelper.showData(rows);
+		}
+		case BY_ID -> {
+			System.out.println(MessageStyler.makePurple(Emoji.CLOCK + "Reading based on id."));
+			int id = InputManager.intInput(" Enter id/sn to read data from '" + dbName + "'.'" + tableName + "'");
+			Map<String, Object> row = ci.readOneRowById(dbName, tableName, id);
+			return DisplayHelper.printMap(row);
+		}
+
+		case BY_CREDENTIALS -> {
+			System.out.println(MessageStyler.makePurple(Emoji.CLOCK + "Reading based on 'userName' and 'password'"));
+			String userName = InputManager
+					.stringInput(" Enter userName to read data from '" + dbName + "'.'" + tableName + "'");
+			String password = InputManager.stringInput("Enter password :");
+			Map<String, Object> row = ci.readOneRowByCredential(dbName, tableName, userName, password);
+			return DisplayHelper.printMap(row);
+		}
+		default -> {
+			return MessageStyler.makeRed() + Emoji.ERROR + "UNKNOWN CASE" + Color.RESET;
+		}
+		}
 
 	}
 

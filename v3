@@ -5,6 +5,13 @@ constructor and variable manager from all class cm,ci.
 move getcoltype() and validName() to CrudHelper(new) class. from menu manager class.
 move getcolvalue() and nullManager() to CrudHelper from CrudManager.
 createTable() of ci is totally changed, now table name is taking from cm(if exitsted, else not come to ci), and to get col-name and 
-col-constrains add one prepareColumnMeta() of CrudHelper class which return map of col-name and col-constrains.which is also manage by  
+col-constrains add one prepareColumnMeta() to CrudHelper class which return map of col-name and col-constrains.which is also manage by  
 cm class and pass dbname,tname,and map to ci from where directly pass those value to cf.cretaeTable().
+
+now new changes to cm.createtable() method. it had too long logic in one place but now keep them separate from single responsible method.
+introduce GetName class to get db/table name with prompt or without prompt msg and can be scalable if needed, and introduce 
+CrudManagerHelper class and now it has method to create table iftablenotexit and ifdbnotexit but scalable .
+
+next: "Centralized primitive integers via IntConstant class under Constants to improve reuse and readability."
+ next: split connectionfactory(large class) into 5 classes.rename curdmanagerhelper as crudflowhelper.
  

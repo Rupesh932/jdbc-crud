@@ -48,8 +48,9 @@ public class MenuManager {
 						System.out.println(result);
 						break;
 					case Constants.Menu.READ_DATA:
-						cm.handleReadData();
-
+						System.out.println(MessageStyler.makePurple(Emoji.CLOCK+"Process Reading: "));
+						 result = cm.handleReadData();
+						System.out.println(result);
 						break;
 					case Constants.Menu.UPDATE_DATA:
 						cm.handleUpadateData();
