@@ -10,6 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import jdbc.basic.launch.Constants.QueryStatus;
+
 public class QueryExecutor {
 
 	public static List<Map<String, Object>> readAllRows(String dbName, String tableName) {
@@ -30,8 +32,9 @@ public class QueryExecutor {
 			}
 		} catch (SQLException e) {
 			Map<String, Object> errorRow = new LinkedHashMap<>();
-			errorRow.put("Error", e.getMessage());
+			errorRow.put("Error", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 			errorRow.put("Table", tableName);
+			errorRow.put("Database", dbName);
 
 			rows.add(errorRow);
 		}
@@ -44,6 +47,7 @@ public class QueryExecutor {
 		String qry = String.format("SELECT *  FROM `%s`.`%s` WHERE `USERNAME` = ? AND `PASSWORD` = ? LIMIT 1", dbName,
 				tableName);
 		Map<String, Object> row = new LinkedHashMap<>();
+
 		try (Connection con = DbConnectionManager.getDbConnection(dbName);
 				PreparedStatement ps = con.prepareStatement(qry)) {
 			ps.setString(1, userName);
@@ -51,21 +55,30 @@ public class QueryExecutor {
 			row = fireExecutQuery(dbName, tableName, qry, ps);
 
 		} catch (SQLException e) {
-			row.put("Error", e.getMessage());
+			row.put("Error", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			row.put("Username", userName);
+			row.put("Password", password);
 		}
+		row.put("Database", dbName);
+		row.put("Table", tableName);
 		return row;
 	}
 
 	public static Map<String, Object> readOneRowById(String dbName, String tableName, int intValue) {
 		String qry = String.format("SELECT *  FROM `%s`.`%s` WHERE `SN` = ? LIMIT 1", dbName, tableName);
 		Map<String, Object> row = new LinkedHashMap<>();
+
 		try (Connection con = DbConnectionManager.getDbConnection(dbName);
 				PreparedStatement ps = con.prepareStatement(qry)) {
 			ps.setInt(1, intValue);
 			row = fireExecutQuery(dbName, tableName, qry, ps);
 		} catch (SQLException e) {
-			row.put("Error", e.getMessage());
+			row.put("Error", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+			row.put("id", intValue);
 		}
+		row.put("Database", dbName);
+		row.put("Table", tableName);
+
 		return row;
 	}
 
@@ -82,7 +95,14 @@ public class QueryExecutor {
 				row.put(colName, colValue);
 			}
 		} else {
-			row.put("fail", "Not found");
+			if (sql.contains("SN")) {
+				row.putAll(QueryStatus.ID_NOT_FOUND.toMap());
+			} else {
+				row.putAll(QueryStatus.USERNAME_NOT_FOUND.toMap());
+				row.putAll(QueryStatus.PASSWORD_NOT_FOUND.toMap());
+			}
+			row.put("Database", dbName);
+			row.put("Table", tableName);
 		}
 		return row;
 	}

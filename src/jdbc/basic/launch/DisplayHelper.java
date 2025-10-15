@@ -3,6 +3,8 @@ package jdbc.basic.launch;
 import java.util.List;
 import java.util.Map;
 
+import jdbc.basic.launch.Constants.QueryStatus;
+
 public class DisplayHelper {
 	@SuppressWarnings({ "unchecked" })
 	public static String showData(Object data) {
@@ -11,8 +13,8 @@ public class DisplayHelper {
 		} else if (data instanceof Map) {
 			return showSingleRow((Map<String, Object>) data);
 		} else {
-			return MessageStyler.makeYellow() + Emoji.FIRE + Constants.OperationMessage.UNSUPPORTED.getMessage()
-					+ Color.RESET;
+			return StyledMessage.Status.warning(QueryStatus.UNSUPPORTED.getMessage());
+
 		}
 	}
 
@@ -21,14 +23,11 @@ public class DisplayHelper {
 		int count = 1;
 		for (Map<String, Object> row : rows) {
 			result = printMap(row);
-			System.out.println(MessageStyler.makeGreen(" #Row-"+count+" "+Constants.OperationStatus.FINISHED.getMessage()+Emoji.CHECKMARK));
+			System.out.println(StyledMessage.Status.success(" #Row-" + count + result));
 			count++;
-			if (result != null && !result.isEmpty()) {
-				continue;
-			}
-			
+
 		}
-		return MessageStyler.makeRed()+Emoji.FIRE+" "+(count -1)+Color.RESET+MessageStyler.makeGreen(" Rows ")+result;
+		return StyledMessage.Action.sparkle((count - 1) + " Rows " + result);
 
 	}
 
@@ -41,16 +40,24 @@ public class DisplayHelper {
 	// Prevents accidental mutation and supports flexible display logic.
 	public static String printMap(Map<?, ?> map) {
 		if (map == null || map.isEmpty()) {
-			return MessageStyler.makeRed(Emoji.CROSSMARK + " Data not found");
+			return StyledMessage.Status.failed(" Data not found");
 
 		}
+		if (map.containsKey("Error") || map.containsKey("Status")) {
+			map.forEach((key, value) -> {
+				System.out.print(StyledMessage.Status.error(key + " : " + Color.Foreground.PURPLE + value));
+				System.out.println(Color.Reset.RESET);
+
+			});
+			return "Reading failed.";
+		}
 		map.forEach((key, value) -> {
-			System.out.print(MessageStyler.makeGreen() + key + " : " + Color.RESET);
-			System.out.print(MessageStyler.makePurple() + Emoji.INFO + value + Color.RESET+" ");
-			System.out.println();
+
+			System.out.print(StyledMessage.Status.info(key + " : " + Color.Foreground.PURPLE + value));
+			System.out.println(Color.Reset.RESET);
 
 		});
-		return MessageStyler.makeGreen(Emoji.SUCCESS + " Reading successful.");
+		return " Reading successful.";
 
 	}
 

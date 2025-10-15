@@ -7,23 +7,24 @@ import java.sql.Statement;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import jdbc.basic.launch.Constants.OperationStatus;
+import jdbc.basic.launch.Constants.QueryStatus;
 
 public class DatabaseAdmin {
 
-	public static OperationStatus createDataBase(String dbName) {
+	public static QueryStatus createDatabase(String dbName) {
 		String qry = "CREATE DATABASE IF NOT EXISTS " + dbName;
 		try (Connection con = DbConnectionManager.getCon(); Statement st = con.createStatement()) {
 			st.executeUpdate(qry);
-			return Constants.OperationStatus.SUCCESS;
+			return QueryStatus.DB_CREATED;
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
-			return Constants.OperationStatus.FAILED;
+			return QueryStatus.DB_CREATION_FAILED;
 		}
 	}
 
-	public static OperationStatus createTable(String dbName, String tableName, Map<String, String> cols) {
+	public static QueryStatus createTable(String dbName, String tableName, Map<String, String> cols) {
 		// 1. start query
 		StringBuilder sqlQuery = new StringBuilder("CREATE TABLE IF NOT EXISTS ").append(tableName).append("(");
 
@@ -42,14 +43,15 @@ public class DatabaseAdmin {
 		// 5.execute the query.
 		try (Connection con = DbConnectionManager.getDbConnection(dbName); Statement st = con.createStatement()) {
 			st.execute(sqlQuery.toString());
-			return Constants.OperationStatus.SUCCESS;
+			return QueryStatus.TABLE_CREATED;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return Constants.OperationStatus.FAILED;
+			return QueryStatus.TABLE_CREATION_FAILED;
 		}
 	}
+
 	public static boolean isTableExists(String dbName, String tableName) {
-		try (Connection con =  DbConnectionManager.getDbConnection(dbName); Statement st = con.createStatement()) {
+		try (Connection con = DbConnectionManager.getDbConnection(dbName); Statement st = con.createStatement()) {
 			ResultSet rs = st.executeQuery("SHOW TABLES");
 			while (rs.next()) {
 				if (rs.getString(1).equals(tableName)) {

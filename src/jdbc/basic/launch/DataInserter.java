@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import jdbc.basic.launch.Constants.OperationStatus;
+import jdbc.basic.launch.Constants.QueryStatus;
 
 public class DataInserter {
 	public static String insertDataUsingStatement(String dbName, String tableName,
@@ -49,16 +49,16 @@ public class DataInserter {
 //			} else {
 //				return Constants.FAILED;
 //			}
-			return (st.executeUpdate(sqlQuery) > 0) ? Constants.OperationStatus.SUCCESS.getMessage()
-					: Constants.OperationStatus.FAILED.getMessage();
+			return (st.executeUpdate(sqlQuery) > 0) ? QueryStatus.SUCCESS.getMessage()
+					:QueryStatus.FAILED.getMessage();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return Constants.OperationStatus.ERROR.getMessage();
+			return QueryStatus.ERROR.getMessage();
 		}
 	}
 
-	public static OperationStatus insertDataUsingPS(String dbName, String tableName, Map<String, Object> rowData) {
+	public static QueryStatus insertDataUsingPS(String dbName, String tableName, Map<String, Object> rowData) {
 		StringBuilder columns = new StringBuilder(" (");
 		StringBuilder placeholders = new StringBuilder();
 		for (String col : rowData.keySet()) {
@@ -76,17 +76,17 @@ public class DataInserter {
 		return executeUpdateUsingPS(dbName, sql, colValues);
 	}
 
-	public static OperationStatus executeUpdateUsingPS(String dbName, String sqlQuery, List<Object> colValues) {
+	public static QueryStatus executeUpdateUsingPS(String dbName, String sqlQuery, List<Object> colValues) {
 		try (Connection con = DbConnectionManager.getDbConnection(dbName);
 				PreparedStatement ps = con.prepareStatement(sqlQuery)) {
 			for (int i = 0; i < colValues.size(); i++) {
 				ps.setObject(i + 1, colValues.get(i));
 			}
-			return (ps.executeUpdate() > 0) ? Constants.OperationStatus.SUCCESS : Constants.OperationStatus.FAILED;
+			return (ps.executeUpdate() > 0) ?QueryStatus.SUCCESS : QueryStatus.FAILED;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return Constants.OperationStatus.ERROR;
+			return QueryStatus.ERROR;
 		}
 	}
 

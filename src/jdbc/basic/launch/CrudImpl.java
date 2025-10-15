@@ -2,18 +2,18 @@ package jdbc.basic.launch;
 
 import java.util.List;
 import java.util.Map;
-import jdbc.basic.launch.Constants.OperationStatus;
+import jdbc.basic.launch.Constants.QueryStatus;
 
 public class CrudImpl implements Crud {
 
 	@Override
-	public OperationStatus createTable(String dbName, String tableName,Map<String,String> colMeta) {
+	public QueryStatus createTable(String dbName, String tableName,Map<String,String> colMeta) {
 
 		return DatabaseAdmin.createTable(dbName, tableName, colMeta);
 	}
 
 	@Override
-	public OperationStatus insertData(String dbName, String tableName, Map<String, Object> userInput) {
+	public QueryStatus insertData(String dbName, String tableName, Map<String, Object> userInput) {
 
 		return DataInserter.insertDataUsingPS(dbName, tableName, userInput);
 	}

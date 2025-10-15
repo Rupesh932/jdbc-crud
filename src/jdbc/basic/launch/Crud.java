@@ -3,18 +3,18 @@ package jdbc.basic.launch;
 import java.util.List;
 import java.util.Map;
 
-import jdbc.basic.launch.Constants.OperationStatus;
+import jdbc.basic.launch.Constants.QueryStatus;
 
 public interface Crud {
-	OperationStatus createTable(String dbName, String tableNmae, Map<String, String> colMeta);
+	QueryStatus createTable(String dbName, String tableNmae, Map<String, String> colMeta);
 
-	OperationStatus insertData(String dbName, String tableName, Map<String, Object> userInput);
+	QueryStatus insertData(String dbName, String tableName, Map<String, Object> userInput);
 
-	List<Map<String,Object>> readAllRows(String dbName, String tableName);
+	List<Map<String, Object>> readAllRows(String dbName, String tableName);
 
-	Map<String,Object> readOneRowByCredential(String dbName, String tableName, String userName, String password);
+	Map<String, Object> readOneRowByCredential(String dbName, String tableName, String userName, String password);
 
-	Map<String,Object> readOneRowById(String dbName, String tableName,int id);
+	Map<String, Object> readOneRowById(String dbName, String tableName, int id);
 
 	void upadateData();
 
