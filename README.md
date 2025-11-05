@@ -3,11 +3,25 @@
 ![License](https://img.shields.io/github/license/Rupesh932/jdbc-crud)
 ![Stars](https://img.shields.io/github/stars/Rupesh932/jdbc-crud?style=social)
 
-
+> ❤️ **Built for myself. Not for clients. Not for show. Just for growth.**
 ## Project Description
 A simple Java project demonstrating CRUD operations using JDBC and MySQL.  
 If you find this project helpful, please ⭐ star it to support future development!
 
+## 🔧 Java Compatibility
+
+| Version | Java Compatibility | Notes |
+|---------|--------------------|-------|
+| v1.0    | Java 8+            | Initial CLI snapshot (incomplete) |
+| v2.0    | Java 8+            | UX and validation groundwork |
+| v3.0    | Java 14+           | Final release with modern syntax |
+
+
+## Features
+- Full CRUD operations
+- Schema inspection
+- Defensive validation
+So yes — README ma comment add garna sakinchha, visible pani, invisible pani. Let me know if you want to leave a personal message for future-you or a TODO list inside the README.
 ## Technologies Used
 - Java
 - JDBC
@@ -45,8 +59,9 @@ Backend architect, CLI UX enthusiast, and open-source contributor. Passionate ab
 - Rupesh Thapaliya — Developer and project lead  
 - AI assistants — Copilot, providing guidance and support
 
+> Note: This project is built using Java 21 and uses features like `record` and `switch expressions`, which require Java 14 or higher.  
+> Earlier versions (v1.0 and v2.0) were Java 8 compatible but incomplete and not recommended for use.
 
-> Note: This project is built using Java 21, but does not rely on any version-specific features. It remains compatible with Java 8 and above.
 
 ## Contact
 For questions or suggestions, feel free to reach out at: thapaliya94@gmail.com
