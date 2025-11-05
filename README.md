@@ -22,17 +22,16 @@ Note: v2.0 and v3.0 require Java 16 or higher due to usage of record (stable in 
 - Full CRUD operations
 - Schema inspection
 - Defensive validation
-So yes — README ma comment add garna sakinchha, visible pani, invisible pani. Let me know if you want to leave a personal message for future-you or a TODO list inside the README.
+
 ## Technologies Used
-- Java
+- Java(see Compatibility above)
 - JDBC
 - MySQL
 
 ## Features
 - Create, Read, Update, Delete operations
-- Database connectivity using JDBC
 - Simple console-based interface
-- 
+
 📘 **Project Evolution Log**  
 Curious how this CLI framework evolved?  
 Check out the [Project Evolution Log](PROJECT_EVOLUTION.md) for design decisions, refactors, and architectural milestones.
@@ -56,7 +55,6 @@ Run the main class and follow the on-screen instructions to perform CRUD operati
 ## Author
 
 **Rupesh Thapaliya** – [GitHub Profile](https://github.com/Rupesh932)  
-Backend architect, CLI UX enthusiast, and open-source contributor. Passionate about expressive validation, developer happiness, and future-proof design.
 
 ## Team
 - Rupesh Thapaliya — Developer and project lead  
