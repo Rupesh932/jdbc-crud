@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import jdbc.basic.launch.Constants.CrudMode;
 import jdbc.basic.launch.Constants.QueryStatus;
 import jdbc.basic.launch.Constants.ReadMode;
 
@@ -45,14 +46,16 @@ public class CrudFlowHelper {
 	}
 
 	public Map<String, Object> dataCollector(String dbName, String tableName, List<ColumnMeta> colMeta) {
+		CrudMode mode = AdminUpdateHelper.mode;
 		Object colValue;
 		String colType;
 		Map<String, Object> userInput = new LinkedHashMap<>();
 		for (ColumnMeta meta : colMeta) {
-			System.out.println(
-					StyledMessage.Input.preview("column name: " + meta.colName() + ", can hold: " + meta.intCode()
-							+ "(typed), is mandatory:" + meta.isMandatory() + ", should unique :" + meta.isUnique()));
 			colType = CrudHelper.getColumnType(meta.intCode());
+			System.out.println(StyledMessage.Input.preview("column name: " + meta.colName() + ", can hold: '" + colType
+					+ "'(typed), is mandatory:" + meta.isMandatory() + ", is password field: " + meta.isPasswordField()
+					+ ", should unique :" + meta.isUnique()));
+
 			if (meta.isMandatory()) {
 				while (true) {
 					colValue = CrudHelper.getColumnValue(colType, meta.colName());
@@ -63,11 +66,21 @@ public class CrudFlowHelper {
 									s + " is already taken, please enter unique value for '" + meta.colName() + "'"));
 							continue;
 						}
+
+					}
+					if (meta.isPasswordField() && colValue instanceof String s) {
+						colValue = PasswordHasher.hash(s);
 					}
 					userInput.put(meta.colName(), colValue);
 					break;
 				}
+				
 			} else {
+				if(Constants.CrudMode.UPDATE.equals(mode)) {
+					colValue = CrudHelper.getColumnValue(colType, meta.colName());
+					 userInput.put(meta.colName(), colValue);
+					 return userInput;
+				}
 				System.out.println(StyledMessage.Status.warning("Do you want to insert data to nullable field ?"));
 
 				char yesNo = InputManager.charInput("Press y/Y to insert or press any key to ignore.");

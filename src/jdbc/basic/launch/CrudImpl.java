@@ -35,13 +35,33 @@ public class CrudImpl implements Crud {
 	}
 
 	@Override
-	public void upadateData() {
-
+	public QueryStatus upadateData(String dbName,String tableName) {
+		return DatabaseAdmin.updateTable(dbName, tableName);
+				
 	}
 
 	@Override
-	public void deleteData() {
+	public QueryStatus deleteRow(String dbName, String tableName) {
+		return DatabaseAdmin.deleteRow(dbName,tableName);
+	}
 
+	@Override
+	public QueryStatus dropTable(String dbName) {
+		
+		return DatabaseAdmin.dropTable(dbName);
+	}
+
+	@Override
+	public QueryStatus dropDatabase() {
+		
+		return null;
+	}
+
+	@Override
+	public QueryStatus alterTable(String dbName, String tableName,QueryStatus status) {
+		
+		return DatabaseAdmin.alterTable(dbName, tableName,status);
+		
 	}
 
 	

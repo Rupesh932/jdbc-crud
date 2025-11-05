@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class SchemaInspector {
+	
 
 	/**
 	 * Returns a list of user-defined tables from the specified database.
@@ -26,7 +27,7 @@ public class SchemaInspector {
 	 */
 	public static List<String> showTables(String dbName) {
 		List<String> tables = new ArrayList<>();
-		try (Connection con = DbConnectionManager.getCon()) {
+		try (Connection con = DbConnectionManager.getServerConnection()) {
 			DatabaseMetaData meta = con.getMetaData();
 			try (ResultSet table = meta.getTables(dbName, null, "%", new String[] { "TABLE" })) {
 				while (table.next()) {
@@ -68,7 +69,7 @@ public class SchemaInspector {
 	 */
 	public static Map<String, List<String>> getAllDatabasesWithTables() {
 		Map<String, List<String>> meta = new LinkedHashMap<>();
-		try (Connection con = DbConnectionManager.getCon()) {
+		try (Connection con = DbConnectionManager.getServerConnection()) {
 			DatabaseMetaData metaData = con.getMetaData();
 			for (String catalog : getCustomDatabases()) {
 				String[] type = { "TABLE" };
@@ -111,7 +112,7 @@ public class SchemaInspector {
 		List<String> customDbs = new ArrayList<>();
 		// listing system-level databases.
 		Set<String> systemDbs = Set.of("mysql", "information_schema", "performance_schema", "sys");
-		try (Connection con = DbConnectionManager.getCon()) {
+		try (Connection con = DbConnectionManager.getServerConnection()) {
 			DatabaseMetaData meta = con.getMetaData();
 			ResultSet catalogs = meta.getCatalogs();
 			while (catalogs.next()) {
@@ -151,7 +152,7 @@ public class SchemaInspector {
 
 	public static boolean isColumnValueUnique(String dbName, String tableName, String colName, String colValue) {
 		String qry = String.format("SELECT COUNT(*) FROM `%s`.`%s` WHERE `%s` = ?", dbName, tableName, colName);
-		try (Connection con = DbConnectionManager.getDbConnection(dbName);
+		try (Connection con = DbConnectionManager.getDatabaseConnection(dbName);
 				PreparedStatement ps = con.prepareStatement(qry);) {
 			ps.setString(1, colValue);
 			ResultSet rs = ps.executeQuery(); // execute query to count matching rows
@@ -196,7 +197,7 @@ public class SchemaInspector {
 		if (!DatabaseAdmin.isTableExists(dbName, tableName)) {
 			return columns;
 		}
-		try (Connection con = DbConnectionManager.getDbConnection(dbName)) {
+		try (Connection con = DbConnectionManager.getDatabaseConnection(dbName)) {
 			DatabaseMetaData meta = con.getMetaData();// now meta has all meta info of dbName.
 			// step 1. collect unique columns
 			Set<String> uniqueCols = new HashSet<>();
@@ -210,6 +211,7 @@ public class SchemaInspector {
 			}
 			// Step 2: Collect insertable columns
 			try (ResultSet rs = meta.getColumns(dbName, null, tableName, null)) {
+				 Set<String> PASSWORD_FIELDS = Set.of("password", "pwd", "user_password", "user_pass");
 				while (rs.next()) {
 					String colName = rs.getString("COLUMN_NAME");
 					int dataType = rs.getInt("DATA_TYPE");
@@ -222,7 +224,8 @@ public class SchemaInspector {
 						// nullable = 1/2 → NULLABLE/UNKNOWN → isMandatory = false
 
 						boolean isUnique = uniqueCols.contains(colName);
-						columns.add(new ColumnMeta(colName, dataType, isMandatory, isUnique));
+						boolean isPassword = PASSWORD_FIELDS.contains(colName.toLowerCase());
+						columns.add(new ColumnMeta(colName, dataType, isMandatory, isUnique, isPassword));
 					}
 				}
 			}
@@ -231,6 +234,24 @@ public class SchemaInspector {
 			e.printStackTrace();
 		}
 		return columns;
+	}
+	
+	public static List<String> getPrimaryKeyCols(String dbName,String tableName) {
+		List<String> pkCols = new ArrayList<>();
+		try(Connection con = DbConnectionManager.getDatabaseConnection(dbName)){
+			DatabaseMetaData meta = con.getMetaData();
+			try(ResultSet pkrs = meta.getPrimaryKeys(dbName, null, tableName)){
+				while(pkrs.next()) {
+					String col = pkrs.getString("COLUMN_NAME");
+					if(col != null)
+					pkCols.add(col);
+				}
+			}
+		}catch(SQLException e) {
+			System.out.println(StyledMessage.Status.error("Error while extracting primary key columns. "));
+			e.printStackTrace();
+		}
+		return pkCols;
 	}
 
 }

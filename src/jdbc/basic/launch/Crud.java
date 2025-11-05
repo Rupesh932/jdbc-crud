@@ -15,8 +15,14 @@ public interface Crud {
 	Map<String, Object> readOneRowByCredential(String dbName, String tableName, String userName, String password);
 
 	Map<String, Object> readOneRowById(String dbName, String tableName, int id);
+	
+	QueryStatus dropTable(String dbName);
+	
+	QueryStatus dropDatabase();
+	
+	QueryStatus alterTable(String dbName,String tableName,QueryStatus status);
 
-	void upadateData();
+	QueryStatus  upadateData(String dbName,String tableName);
 
-	void deleteData();
+	QueryStatus deleteRow(String dbName,String tableName);
 }

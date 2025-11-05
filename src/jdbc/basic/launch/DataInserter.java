@@ -42,7 +42,7 @@ public class DataInserter {
 	}
 
 	public static String executeUpdateUsingStatement(String dbName, String sqlQuery) {
-		try (Connection con = DbConnectionManager.getDbConnection(dbName); Statement st = con.createStatement()) {
+		try (Connection con = DbConnectionManager.getDatabaseConnection(dbName); Statement st = con.createStatement()) {
 //			int row = st.executeUpdate(sqlQuery);
 //			if (row > 0) {
 //				return Constants.SUCCESS;
@@ -77,7 +77,7 @@ public class DataInserter {
 	}
 
 	public static QueryStatus executeUpdateUsingPS(String dbName, String sqlQuery, List<Object> colValues) {
-		try (Connection con = DbConnectionManager.getDbConnection(dbName);
+		try (Connection con = DbConnectionManager.getDatabaseConnection(dbName);
 				PreparedStatement ps = con.prepareStatement(sqlQuery)) {
 			for (int i = 0; i < colValues.size(); i++) {
 				ps.setObject(i + 1, colValues.get(i));

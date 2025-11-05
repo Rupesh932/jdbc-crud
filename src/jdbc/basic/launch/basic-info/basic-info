@@ -1,0 +1,59 @@
+List<String[]> info = new ArrayList<>();
+
+info.stream() is equivalent to:
+    for (String[] value : info) {
+        // do something with value
+    }
+
+info.stream()
+    .filter(arr -> arr[0].equals("username"))
+    .forEach(arr -> System.out.println(arr[1]));
+
+is equivalent to:
+    for (String[] arr : info) {
+        if (arr[0].equals("username")) {
+            System.out.println(arr[1]);
+        }
+    }
+
+------------------------------------------------------------
+🧠 EXPLANATION:
+
+info is a List<String[]>
+→ So each element inside info is a String[] — an array of strings
+→ That array represents metadata of one column in a table
+
+👉 So arr is one column’s metadata like:
+    arr = new String[] {
+        "username",         // arr[0] → column name
+        "VARCHAR(50)",      // arr[1] → data type
+        "UNI",              // arr[2] → key constraint
+        "YES",              // arr[3] → nullability
+        ""                  // arr[4] → extra flags
+    }
+
+.filter(arr -> arr[0].equals("username"))
+→ It checks: “Is this column’s name exactly 'username'?”
+
+arr is just a temporary variable name for each array inside info.
+→ arr is defined inside the lambda expression — YOU defined it.
+→ Java Stream API automatically passes each element of the list (info) into the lambda, and you name it arr.
+→ You could name it anything: col, meta, x — but 'arr' is semantically meaningful here because it’s an array.
+
+Since arr is a String[], arr[0] is the first element of that array.
+→ In your case, arr[0] is the column name (e.g., "username")
+→ arr[1] is the data type (e.g., "VARCHAR(50)")
+→ arr[2] is the key constraint (e.g., "UNI")
+→ arr[3] is nullability (e.g., "YES" or "NO")
+→ arr[4] is extra flags (e.g., "AUTO_INCREMENT" or empty)
+
+------------------------------------------------------------
+🧾 Summary:
+
+- info.stream() → stream over each String[] in the list
+- arr → one column’s metadata (String[])
+- arr[0] → column name
+- arr[1] → data type
+- arr[2] → key constraint
+- arr[3] → nullability
+- arr[4] → extra flags

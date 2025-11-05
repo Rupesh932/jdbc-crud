@@ -20,17 +20,17 @@ next: "Centralized primitive integers via IntConstant class under Constants to i
  next: add ReadMode enum to Constants class.
  next: implements handleReadData() method in CrudManager class.
  
- some todo:1. map out the dbname and corresponding table into map for all db and table to show before enter db/tb name, user can see and enters
+ some todo1. map out the dbname and corresponding table into map for all db and table to show before enter db/tb name, user can see and enters
              which db and tb ,without confusing. 
-           2. develop batch insert, update,delete even create table too .  
+       todo2. develop batch insert, update,delete even create table too .  
            
-           done : show db and table list before user enter their name.
+           done todo1: show db and table list before user enter their name.
  next done: remove MessageStyler class and introduce new StyledMessage class with centralize contorl over bg+emoji+fg+msg   
  		  : Handles all styled output (success, error, warning, input prompts...)     
  		  
 next done: remove GetName class and move its renamed and refactured method  to inputmanager to get valid db/tb or new db/tb.
-		 : may be isDatabaseExit() of DbConnectionManger will deprecated or its only use to get quick result(true/false) if project 
-		   needs info of db, otherwise newly introduced method dbNameInput() can handle all posibilities.
+		 :  isDatabaseExit() of DbConnectionManger  only use to get quick result(true/false) if project 
+		   needs, otherwise newly introduced method dbNameInput() can handle all posibilities.
 	   
 	    
 next done: combine Constants.enum OperationStatus and OperationMessage to QueryStatus and added getCode() method and code param to constructor and introduce 

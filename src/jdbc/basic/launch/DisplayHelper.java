@@ -27,7 +27,7 @@ public class DisplayHelper {
 			count++;
 
 		}
-		return StyledMessage.Action.sparkle((count - 1) + " Rows " + result);
+		return StyledMessage.Action.sparkle("Found  " + (count - 1) + " Row/s from database");
 
 	}
 
@@ -43,13 +43,13 @@ public class DisplayHelper {
 			return StyledMessage.Status.failed(" Data not found");
 
 		}
-		if (map.containsKey("Error") || map.containsKey("Status")) {
-			map.forEach((key, value) -> {
-				System.out.print(StyledMessage.Status.error(key + " : " + Color.Foreground.PURPLE + value));
-				System.out.println(Color.Reset.RESET);
 
-			});
-			return "Reading failed.";
+
+		if (QueryStatus.ID_NOT_FOUND.name().equals(map.get("Status"))) {
+			System.out.print(StyledMessage.Status.error("Id " +map.get("id")+ " is not found"));
+			System.out.println(Color.Reset.RESET);
+
+			return StyledMessage.Status.failed("Reading failed.");
 		}
 		map.forEach((key, value) -> {
 
@@ -57,7 +57,7 @@ public class DisplayHelper {
 			System.out.println(Color.Reset.RESET);
 
 		});
-		return " Reading successful.";
+		return StyledMessage.Status.success( " Read completed.");
 
 	}
 

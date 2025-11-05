@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import jdbc.basic.launch.Constants.QueryStatus;
 
 public class QueryExecutor {
@@ -18,7 +17,7 @@ public class QueryExecutor {
 		String qry = String.format("SELECT * FROM `%s`.`%s` ", dbName, tableName);
 		List<Map<String, Object>> rows = new ArrayList<>();
 
-		try (Connection con = DbConnectionManager.getDbConnection(dbName);
+		try (Connection con = DbConnectionManager.getDatabaseConnection(dbName);
 				PreparedStatement ps = con.prepareStatement(qry)) {
 			ResultSet rs = ps.executeQuery();
 			ResultSetMetaData meta = rs.getMetaData();
@@ -48,7 +47,7 @@ public class QueryExecutor {
 				tableName);
 		Map<String, Object> row = new LinkedHashMap<>();
 
-		try (Connection con = DbConnectionManager.getDbConnection(dbName);
+		try (Connection con = DbConnectionManager.getDatabaseConnection(dbName);
 				PreparedStatement ps = con.prepareStatement(qry)) {
 			ps.setString(1, userName);
 			ps.setString(2, password);
@@ -59,8 +58,11 @@ public class QueryExecutor {
 			row.put("Username", userName);
 			row.put("Password", password);
 		}
-		row.put("Database", dbName);
-		row.put("Table", tableName);
+			
+			row.put("Database", dbName);
+			row.put("Table", tableName);
+		
+		
 		return row;
 	}
 
@@ -68,7 +70,7 @@ public class QueryExecutor {
 		String qry = String.format("SELECT *  FROM `%s`.`%s` WHERE `SN` = ? LIMIT 1", dbName, tableName);
 		Map<String, Object> row = new LinkedHashMap<>();
 
-		try (Connection con = DbConnectionManager.getDbConnection(dbName);
+		try (Connection con = DbConnectionManager.getDatabaseConnection(dbName);
 				PreparedStatement ps = con.prepareStatement(qry)) {
 			ps.setInt(1, intValue);
 			row = fireExecutQuery(dbName, tableName, qry, ps);
@@ -76,14 +78,16 @@ public class QueryExecutor {
 			row.put("Error", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 			row.put("id", intValue);
 		}
-		row.put("Database", dbName);
-		row.put("Table", tableName);
+		row.put("id", intValue);
+		
 
 		return row;
 	}
 
 	public static Map<String, Object> fireExecutQuery(String dbName, String tableName, String sql, PreparedStatement ps)
 			throws SQLException {
+//		List<ColumnMeta> colMeta = SchemaInspector.getInsertableColumns(dbName, tableName); 
+//		Set<String> colName = colMeta.stream().map(ColumnMeta::name).collect(Collectors.toSet());
 		ResultSet rs = ps.executeQuery();
 		ResultSetMetaData meta = rs.getMetaData();
 		Map<String, Object> row = new LinkedHashMap<>();
@@ -97,9 +101,11 @@ public class QueryExecutor {
 		} else {
 			if (sql.contains("SN")) {
 				row.putAll(QueryStatus.ID_NOT_FOUND.toMap());
+				
+
 			} else {
-				row.putAll(QueryStatus.USERNAME_NOT_FOUND.toMap());
-				row.putAll(QueryStatus.PASSWORD_NOT_FOUND.toMap());
+				row.putAll(QueryStatus.USERNAME_NOT_MATCHED.toMap());
+				row.putAll(QueryStatus.PASSWORD_NOT_MATCHED.toMap());
 			}
 			row.put("Database", dbName);
 			row.put("Table", tableName);

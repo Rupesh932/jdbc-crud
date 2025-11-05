@@ -18,7 +18,8 @@ public class InputManager {
 		String styledDb = StyledMessage.Status.info("Available databases: " + existedDb);
 		System.out.println(styledDb);
 		while (true) {
-			String dbName = CrudHelper.validName(prompt);
+			String dbName = Validation.validateDbName(prompt);
+
 			if (existedDb.contains(dbName)) {
 				System.out.println(StyledMessage.Action.sparkle(Constants.QueryStatus.DB_EXISTED.getMessage(),
 						Emoji.Status.SUCCESS));
@@ -48,13 +49,27 @@ public class InputManager {
 	}
 
 	public static String tableNameInput(String dbName, String prompt) {
+
 		List<String> tableList = SchemaInspector.showTables(dbName);
-		if(!tableList.isEmpty()) {
-			
+		if (!tableList.isEmpty()) {
 			String styledTable = StyledMessage.Status.info("Available tables: " + tableList);
 			System.out.println(styledTable);
+			return Validation.validateTableName(prompt);
 		}
-		return CrudHelper.validName(prompt);
+
+		System.out.println(StyledMessage.Input.prompt("Do you want to create table "));
+		char yesNo = charInput("\t Enter y/Y to create or press any key to ignore");
+		if (Character.toLowerCase(yesNo) == 'y') {
+
+			String tableName = Validation.validateTableName("Enter table name to create table");
+			String msg = new CrudFlowHelper().createTableIfNotExist(dbName, tableName);
+			System.out.println(msg);
+			//System.out.println(SchemaInspector.showTables(dbName));
+			return tableName;
+		} else {
+			System.out.println(StyledMessage.Input.prompt("Process halted "));
+			return QueryStatus.TABLE_SKIPPED.name();
+		}
 	}
 
 	public static int intInput(String prompt) {

@@ -1,54 +1,68 @@
 package jdbc.basic.launch;
 
+import jdbc.basic.launch.Constants.Input;
+import jdbc.basic.launch.Constants.Menu;
+import jdbc.basic.launch.Constants.QueryStatus;
+import jdbc.basic.launch.Constants.SubMenu;
+
 public class MenuManager {
 
-	private CrudManager cm = new CrudManager();;
-
-	public void menu() {
-		System.out.println();
-		String menuText = StyledMessage.Banner.menu("  MY SERVICES     ", """
-				1. CREATE TABLE
-				2. INSERT DATA
-				3. READ DATA
-				4. UPDATE DATA
-				5. DELETE
-				9. EXIT.
-				""");
-		System.out.println(menuText);
-	}
+	private static CrudManager cm = new CrudManager();
 
 	public void menuHandler() {
 		int attempt = Constants.Input.MIN_ATTEMPTS;
 		String result = "";
 		while (true) {
 			if (attempt < Constants.Input.MAX_ATTEMPTS) {
-				menu();
+				ServiceMenu.mainMenu();
 				int choice = InputManager.intInput("enter your choice  ");
-				if (choice == Constants.Menu.EXIT) {
-					System.out.println(StyledMessage.System.exit(" now existing, thankx for using"));
+				if (choice == Menu.EXIT) {
+					System.out.println(StyledMessage.System.exit("Exiting... Thanks for using!"));
 					return;
 				}
-				if (choice >= Constants.Input.MIN_OPTION && choice <= Constants.Input.MAX_OPTION) {
-					attempt = Constants.Input.MIN_ATTEMPTS;
+				if (choice >= Input.MIN_OPTION && choice <= Input.MAX_OPTION) {
+					attempt = Input.MIN_ATTEMPTS;
 					switch (choice) {
-					case Constants.Menu.CREATE_TABLE:
+					case Menu.CREATE_TABLE:
+						System.out.println(
+								StyledMessage.Action.sparkle("Table creation in progress...", Emoji.Build.INSTALL));
 						result = cm.handleTableCreation();
 						System.out.println(result);
 						break;
-					case Constants.Menu.INSERT_DATA:
+					case Menu.INSERT_DATA:
+						System.out.println(
+								StyledMessage.Action.sparkle("Inserting data into table...", Emoji.Status.THINKING));
 						result = cm.handleInsertData();
 						System.out.println(result);
 						break;
-					case Constants.Menu.READ_DATA:
-						System.out.println(StyledMessage.Action.sparkle("Process Reading: ", Emoji.UI.GLASSES));
+					case Menu.READ_DATA:
+						System.out.println(StyledMessage.Action.sparkle("Reading rows...", Emoji.UI.OPEN_BOOK));
 						result = cm.handleReadData();
 						System.out.println(result);
 						break;
-					case Constants.Menu.UPDATE_DATA:
-						cm.handleUpadateData();
+					case Menu.UPDATE_DATA:
+						System.out.println(StyledMessage.Action.sparkle("Updating rows...", Emoji.Build.UPDATE));
+						result = cm.handleUpadateData();
+						System.out.println(result);
 						break;
-					case Constants.Menu.DELETE_DATA:
-						cm.handleDeleteData();
+					case Menu.DELETE_DATA:
+						System.out.println(StyledMessage.Action.sparkle("Deleting rows...", Emoji.FileOps.TRASH));
+						result =cm.handleDeleteData();
+						System.out.println(StyledMessage.Status.info(result));
+						break;
+					case Menu.DROP_TABLE:
+						System.out.println(StyledMessage.Action.sparkle("Drop table is processing...", Emoji.FileOps.TRASH));
+						result = cm.handleDropTable();
+						System.out.println(StyledMessage.Status.info(result));
+						break;
+					case Menu.DROP_DATABASE:
+						System.out.println(StyledMessage.Action.sparkle("Drop table is processing...", Emoji.FileOps.TRASH));
+						result = DatabaseAdmin.dropDatabase().getMessage();
+						System.out.println(StyledMessage.Status.info(result));
+						break;
+					case Menu.ALTER_TABLE:
+						ServiceMenu.alterTableSubMenu();
+						subMenu();
 						break;
 					default:
 						break;
@@ -64,6 +78,38 @@ public class MenuManager {
 			}
 		}
 
+	}
+
+	public static void subMenu() {
+		while (true) {
+			String result = " ";
+			int choice = InputManager.intInput("Enter your choice");
+			if (choice == SubMenu.BACK) {
+				System.out.println(StyledMessage.Action.fixed("Returning service menu"));
+				return;
+			}
+			switch (choice) {
+			case SubMenu.ADD_COLUMN:
+				System.out.println(StyledMessage.Action.sparkle("Alter table : 'add column' processing...", Emoji.FileOps.NOTE));
+				result = cm.handleAlterTable(QueryStatus.ADD_COLUMN);
+				System.out.println(StyledMessage.Status.info(result));
+				break;
+			case SubMenu.DROP_COLUMN:
+				System.out.println(StyledMessage.Action.sparkle("Alter table : 'drop column' processing...", Emoji.FileOps.NOTE));
+				result = cm.handleAlterTable(QueryStatus.DROP_COLUMN);
+				System.out.println(StyledMessage.Status.info(result));
+				break;
+			case SubMenu.MODIFY_COLUMN:
+				System.out.println(StyledMessage.Action.sparkle("Alter table : 'modify column' processing...", Emoji.FileOps.NOTE));
+				result = cm.handleAlterTable(QueryStatus.MODIFY_COLUMN);
+				System.out.println(StyledMessage.Status.info(result));
+				return;
+			
+			default:
+				System.out.println(
+						StyledMessage.Status.warning("Invalid choice, enter valid(1- 5) or (0 to back) input "));
+			}
+		}
 	}
 
 }

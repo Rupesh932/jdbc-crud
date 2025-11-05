@@ -1,0 +1,11 @@
+
+  
+ DDL => DATA DEFINATION LANGUAGE(ALTER, CREATE, DROP, RENAME, TRUNCATE) => returns 0 even in success else exception (MODIFY SCHEMA):executeUpdate()
+
+ DML => DATA MANIPULATION LANGUAGE(INSERT, UPDATE, DELETE, MERGE) => returns number of rows affected(MODIFY DATA):executeUpdate()
+ 
+ DQL => DATA QUERY LANGUAGE(SELECT) => return result set(FETCH DATA) : executeQuery()
+
+ DCL => GRANT, REVOKE (PERMISSION)
+
+ DTL => COMMIT, ROLLBACK, SAVEPOINT, SET TRANSACTION (TRANSATION CONTROL)
