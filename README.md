@@ -32,12 +32,14 @@ So yes — README ma comment add garna sakinchha, visible pani, invisible pani. 
 - Create, Read, Update, Delete operations
 - Database connectivity using JDBC
 - Simple console-based interface
+- 
 📘 **Project Evolution Log**  
 Curious how this CLI framework evolved?  
 Check out the [Project Evolution Log](PROJECT_EVOLUTION.md) for design decisions, refactors, and architectural milestones.
 
 ## Prerequisites
-- Java JDK 8 or higher
+-Java JDK 16 or higher — required to build and run the current codebase (v2.0 and v3.0) because the project uses record and modern switch expressions.
+-Java JDK 8 — only if you explicitly checkout and run the legacy v1.0 tag; v1.0 is an incomplete snapshot and not recommended
 - MySQL installed and running
 - Eclipse IDE or any Java IDE
 
