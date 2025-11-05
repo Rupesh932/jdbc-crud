@@ -12,10 +12,11 @@ If you find this project helpful, please ⭐ star it to support future developme
 
 | Version | Java Compatibility | Notes |
 |---------|--------------------|-------|
-| v1.0    | Java 8+            | Initial CLI snapshot (incomplete) |
-| v2.0    | Java 8+            | UX and validation groundwork |
-| v3.0    | Java 14+           | Final release with modern syntax |
+| v1.0    | Java 8+            | Initial working CLI (incomplete, legacy) |
+| v2.0    |Java 16+            | Metadata-driven UX and validation (uses record) |
+| v3.0    | Java 16+          | Final release with modern syntax |
 
+Note: v2.0 and v3.0 require Java 16 or higher due to usage of record (stable in Java 16) and modern switch expressions. v1.0 remains Java 8 compatible but is an incomplete legacy snapshot and not recommended for use.
 
 ## Features
 - Full CRUD operations
@@ -58,10 +59,6 @@ Backend architect, CLI UX enthusiast, and open-source contributor. Passionate ab
 ## Team
 - Rupesh Thapaliya — Developer and project lead  
 - AI assistants — Copilot, providing guidance and support
-
-> Note: This project is built using Java 21 and uses features like `record` and `switch expressions`, which require Java 14 or higher.  
-> Earlier versions (v1.0 and v2.0) were Java 8 compatible but incomplete and not recommended for use.
-
 
 ## Contact
 For questions or suggestions, feel free to reach out at: thapaliya94@gmail.com
