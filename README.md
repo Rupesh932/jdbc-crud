@@ -4,6 +4,11 @@
 ![Stars](https://img.shields.io/github/stars/Rupesh932/jdbc-crud?style=social)
 
 > ❤️ **Built for myself. Not for clients. Not for show. Just for growth.**
+> 
+> Recommended: Use v3.0 (Java 16+).
+> git clone https://github.com/Rupesh932/jdbc-crud.git
+> cd jdbc-crud && git checkout v3.0
+> 
 ## Project Description
 A simple Java project demonstrating CRUD operations using JDBC and MySQL.  
 If you find this project helpful, please ⭐ star it to support future development!
